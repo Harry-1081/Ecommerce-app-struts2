@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>noUser Access</title>
+        <style>
+            body {
+                background-color: #f4f4f9;
+                margin: 0; 
+                padding: 0; 
+                 font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            }
+            #noUser {
+                position: absolute;
+                left: 40%;
+                top: 35%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+    </head>
+    <script>
+        function goToLogin() {
+            window.location.href = "/basic-struts/login";
+        }
+    </script>
+    <body>
+        <div id="noUser">
+            <div style="align-items: center;">
+                <h1>Oops!!</h1>
+                <h3>You have to Login to access this feature</h3>
+                <button style="height: 40px; width: 180px; margin-top: 10px; font-size: medium;
+                    background-color: black; color: aliceblue;" onclick="goToLogin()">Login now!!</button>
+            </div>
+        </div>
+    </body>
+</html>

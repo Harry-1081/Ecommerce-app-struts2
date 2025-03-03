@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+    <script src="manager.js" defer></script>
+</head>
+<style>
+    body { 
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0; 
+        padding: 0; 
+    }
+    h1 { 
+        text-align: center;
+        color: #333;
+        padding: 20px; 
+    }
+    ul { 
+        list-style-type: none;
+        padding: 0; 
+    }
+    li { 
+        background-color: #fff; 
+        margin: 10px auto; 
+        padding: 15px; 
+        width: 80%; 
+        border-radius: 8px; 
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+        font-size: 1.2em; 
+    }
+    .manager-details {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+    .manager-details div {
+        height: 30px;
+        padding: 10px;
+        border: 1px black solid;
+    }
+    #manager-pid {
+        width: 5%;
+    }
+    #manager-pname, #manager-price, #manager-edit, #manager-delete {
+        width: 15%;
+    }
+    #manager-quantity {
+        width: 25%;
+    }
+    #manager-edit button, #manager-delete button {
+        color: #333;
+        height: 30px;
+        font-family:"Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+    }
+    #editPopup, #AddPopup {
+        width: 100vw;
+        height: 100vh;
+        z-index: 20 ;
+        position: fixed;
+        top: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        transition: all 1s ease-in-out;
+        left: 0;
+    }
+    #editPopup-box, #AddPopup-box {
+        top: 25%;
+        left: 40%;
+        position: absolute;
+        height: 320px;
+        /* width: 250px; */
+        padding: 20px;
+        background:rgb(255, 248, 248);
+        border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3); 
+    }
+    #editPopup-box input, #AddPopup-box input {
+        width: 220px;
+    }
+    #editPopup-box button, #AddPopup-box button {
+        height: 30px;
+        margin-top: 20px;
+        font-family:"Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+    }
+    #manager-add button {
+        background-color: white;
+        color: black;
+        height: 25px;
+        padding: 5px;
+    }
+    #manager-box {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+         
+    #notifications-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+    }
+
+    .notification {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+        width: 250px;
+        opacity: 0;
+        animation: fadeInOut 5s forwards;
+    }
+
+    @keyframes fadeInOut {
+        0% { opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+</style>
+    <body>
+        <script>
+            fetch('components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+                    document.getElementById('mheader-nav').style.display = 'block';
+                });
+        </script>
+        <div id="header-container"></div>
+        <div id="manager-page">
+            
+            <div id="manager-box">
+
+                <div style="flex-grow: 1; margin-left: 150px;">
+                    <h1>Product Details</h1>
+                </div>
+                    
+                <div id="manager-add" style="margin-right: 150px; padding-left: auto;">
+                    <button type="button" 
+                        onclick="openAddPopup('',1,1)">
+                        <b>Add Product</b>
+                    </button>
+                </div>
+            </div>
+
+            <div id="AddPopup" style="display: none;">
+                <div id="AddPopup-box">
+                    
+                    <div style="display: flex; justify-content: space-evenly; align-items: center; border: none; margin-bottom: 30px;">
+                        <h2>Add Product</h2>
+                        <button style="background-color: rgb(232, 142, 142); height: 20px; margin-bottom: 10px;" onclick="closeAddPopup()">X</button>
+                    </div>
+                    
+                    <form id="add-form">
+                        <div style="display: flex; flex-direction: column; border: none; margin-bottom: 7px;">
+                            <label style="font-size: small; margin-right: auto; padding-bottom: 5px;" for="productName">Product Name</label>
+                            <input type="text" name="productName" id = "AproductName" value="" placeholder="Enter Product Name" required>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; border: none; margin-bottom: 7px;">
+                            <label style="font-size: small; margin-right: auto; padding-bottom: 5px;" for="productPrice">Product Price</label>
+                            <input type="number" name="productPrice" id = "AproductPrice" value="1" min="1" required>
+                        </div>
+                            
+                        <div style="display: flex; flex-direction: column; border: none; margin-bottom: 7px;">
+                            <label style="font-size: small; margin-right: auto; padding-bottom: 5px;" for="productQuantity">Available Quantity</label>
+                            <input type="number" name="productQuantity" id = "AproductQuantity" value="1" min="1" required>
+                        </div>
+
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            <button onclick="addProduct()" type="submit" style="background-color: rgb(162, 225, 146);">Add Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <ul style="margin-top: -15px;">
+                <li class="manager-details">
+                    <div id="manager-pid">
+                        <span>Id</span>
+                    </div>
+                    <div id="manager-pname">
+                        <span>Product Name</span>
+                    </div>
+                    <div id="manager-price">
+                        <span>Product Price</span>
+                    </div>
+                    <div id="manager-quantity">
+                        <span>Quantity Available</span>
+                    </div>
+                    
+                    <div id="manager-edit">
+                        <span>x</span>
+                    </div>
+                    
+                    <div id="manager-delete">
+                        <span>x</span>
+                    </div>
+                </li>
+
+                <ul id="product-list">
+
+                </ul>
+                    
+                <div id="editPopup" style="display: none;">
+                    <div id="editPopup-box">
+
+                        <div style="display: flex; justify-content: space-evenly; border: none; margin-bottom: 30px;">
+                            <h3>Edit Details</h3>
+                            <button style="background-color: rgb(232, 142, 142); height: 20px;" onclick="closeEditPopup()">X</button>
+                        </div>
+                        
+                        <form id="edit-form">
+                            <input type="hidden" name="productId" id = "EproductId">
+
+                            <div style="display: flex; flex-direction: column; border: none; margin-bottom: 7px;">
+                                <label style="font-size: small; margin-right: auto; padding-bottom: 5px;" for="productName">Product Name</label>
+                                <input type="text" name="productName" id = "EproductName" disabled>
+                            </div>
+                                
+                            <div style="display: flex; flex-direction: column; border: none; margin-bottom: 7px;">
+                                <label style="font-size: small; margin-right: auto; padding-bottom: 5px;" for="productPrice">Updated Price</label>
+                                <input type="number" name="productPrice" id = "EproductPrice" min="1" required>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; border: none; margin-bottom: 7px;">
+                                <label style="font-size: small; margin-right: auto; padding-bottom: 5px;" for="productQuantity">Update Quantity</label>
+                                <input type="number" name="productQuantity" id = "EproductQuantity" min="1" required>
+                            </div>
+                                
+                            <button type="submit" style="background-color: rgb(162, 225, 146);">Update Data</button>
+                        </form>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <div id="notifications-container"></div>
+    </body>
+</html>

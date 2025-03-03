@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Header</title>
+    <style>
+        #header-page{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+            width: 100%;
+            background-color: black;
+            color: white;
+            padding: 0;
+            margin: 0;
+        }
+        #header-page span, #header-page a{
+            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            padding: 10px;
+        }
+        #header-logoutbtn {
+            margin-right: 30px;
+        }
+        #header-home {
+            margin-left: 30px;
+        }
+        a {
+            text-decoration: none;  
+            color: inherit;
+        }
+    </style>
+</head>
+    <body>
+        <div id="header-page">
+            <nav id="header-nav" style="display: none;">
+                <a class="nav-link" href="/basic-struts/product" id="header-home"><b>Home</b></a>
+                <span class="nav-separator">|</span>
+                <a class="nav-link" href="/basic-struts/wallet" id="header-wallet"><b>Wallet</b></a>
+                <span class="nav-separator">|</span>
+                <a class="nav-link" href="/basic-struts/cart" id="header-cart"><b>Cart</b></a>
+            </nav>
+
+            <nav id="aheader-nav" style="display: none;">
+                <a class="nav-link" href="/basic-struts/admin" id="header-home"><b>Manage Users</b></a>
+                <span class="nav-separator">|</span>
+                <a class="nav-link" href="/basic-struts/manager" id="header-cart"><b>Manage Products</b></a>
+            </nav>
+            
+            <nav id="saheader-nav" style="display: none;">
+                <a class="nav-link" href="/basic-struts/Superadmin" id="header-home"><b>Manage Users</b></a>
+            </nav>
+
+            <nav id="mheader-nav" style="display: none;">
+                <a class="nav-link" href="/basic-struts/manager" id="header-home"><b>Manage Products</b></a>
+                <span class="nav-separator">|</span>
+                <a class="nav-link" href="/basic-struts/alert" id="header-cart"><b>View Alerts</b></a>
+            </nav>
+
+            <nav>
+                <a class="nav-link" href="/basic-struts/login"  style="border: none;" id="header-logoutbtn"><b>Logout</b></a>
+            </nav>
+
+        </div>
+    </body>
+</html>

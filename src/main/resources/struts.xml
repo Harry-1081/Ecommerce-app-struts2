@@ -1,0 +1,186 @@
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <package name="rest" extends="rest-default,json-default">
+        
+        <action name="login" class="controller.LoginController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="login">/login.html</result>
+        </action>
+
+        <action name="signup" class="controller.SignupController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="signup">/signup.html</result>
+        </action>
+
+        <action name="product" class="controller.ProductController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="home">/home.html</result>
+        </action>
+
+        <action name="product/{id}" class="controller.ProductController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+        </action>
+
+    </package>
+
+    <package name="rest-Superadmin" extends="rest-default,json-default,struts-default">
+
+        <interceptors>
+            <interceptor name="roleInterceptor" class="interceptor.RoleInterceptor">
+                <param name="allowedRole">Superadmin</param>
+            </interceptor>
+            <interceptor-stack name="defaultStack">
+                <interceptor-ref name="roleInterceptor"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <action name="Superadmin" class="controller.SuperAdminController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="Superadmin">/superadmin.html</result>
+            <result name="unauthorized">components/unauthorized.html</result>
+            <result name="noUser">components/noUser.html</result>
+        </action>
+
+        <action name="Superadmin/{id}" class="controller.SuperAdminController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+        </action>
+
+    </package>
+
+    <package name="rest-admin" extends="rest-default,json-default">
+
+        <interceptors>
+            <interceptor name="roleInterceptor" class="interceptor.RoleInterceptor">
+                <param name="allowedRole">admin</param>
+            </interceptor>
+            <interceptor-stack name="defaultStack">
+                <interceptor-ref name="roleInterceptor"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+
+
+        <action name="admin" class="controller.AdminController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="admin">/admin.html</result>
+            <result name="unauthorized">components/unauthorized.html</result>
+            <result name="noUser">components/noUser.html</result>
+        </action>
+
+        <action name="admin/{id}" class="controller.AdminController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="unauthorized">components/unauthorized.html</result>
+            <result name="noUser">components/noUser.html</result>
+        </action>
+
+    </package>
+
+    <package name="rest-manager" extends="rest-default,json-default">
+
+        <interceptors>
+            <interceptor name="roleInterceptor" class="interceptor.RoleInterceptor">
+                <param name="allowedRole">manager</param>
+            </interceptor>
+            <interceptor-stack name="defaultStack">
+                <interceptor-ref name="roleInterceptor"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        
+        <action name="manager" class="controller.ManagerController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="manager">/manager.html</result>
+            <result name="unauthorized">components/unauthorized.html</result>
+            <result name="noUser">components/noUser.html</result>
+        </action>
+
+        <action name="manager/{id}" class="controller.ManagerController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="unauthorized">components/unauthorized.html</result>
+            <result name="noUser">components/noUser.html</result>
+        </action>
+
+        <action name="alert" class="controller.AlertController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="alert">/alert.html</result>
+        </action>
+
+    </package>
+
+    <package name="rest-user" extends="rest-default,json-default">
+
+        <interceptors>
+            <interceptor name="roleInterceptor" class="interceptor.RoleInterceptor">
+                <param name="allowedRole">user</param>
+            </interceptor>
+            <interceptor-stack name="defaultStack">
+                <interceptor-ref name="roleInterceptor"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <action name="purchase" class="controller.PurchaseController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="noUser">components/noUser.html</result>
+        </action>
+
+        <action name="purchase/{id}" class="controller.PurchaseController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="noUser">components/noUser.html</result>
+        </action>
+
+        <action name="cart" class="controller.CartController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="cart">/cart.html</result>
+            <result name="noUser">components/noUser.html</result>
+        </action>
+
+        <action name="cart/{id}" class="controller.CartController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="noUser">components/noUser.html</result>
+        </action>
+
+        <action name="wallet" class="controller.WalletController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="wallet">/wallet.html</result>
+            <result name="noUser">components/noUser.html</result>
+        </action>
+
+    </package>
+
+</struts>
