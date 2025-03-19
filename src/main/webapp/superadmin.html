@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <title>User Details</title>
-        <script src="superadmin.js" defer></script>
+        <script src="Components/JS/superadmin.js" defer></script>
 </head>
 <style>
     body { 
@@ -95,7 +95,7 @@
 </style>
 <body>
     <script>
-        fetch('components/header.html')
+        fetch('Components/HTML/header.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-container').innerHTML = data;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Unauthorized Access</title>
+        <title>noUser Access</title>
         <style>
             body {
                 background-color: #f4f4f9;
@@ -9,7 +9,7 @@
                 padding: 0; 
                  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
             }
-            #Unauthorized {
+            #noUser {
                 position: absolute;
                 left: 40%;
                 top: 35%;
@@ -21,16 +21,16 @@
     </head>
     <script>
         function goToLogin() {
-            window.location.href = "/login";
+            window.location.href = "/struts2/login";
         }
     </script>
     <body>
-        <div id="Unauthorized">
+        <div id="noUser">
             <div style="align-items: center;">
-                <h1>Page not found</h1>
-                <h3>The resource does not exist</h3>
+                <h1>Oops!!</h1>
+                <h3>You have to Login to access this feature</h3>
                 <button style="height: 40px; width: 180px; margin-top: 10px; font-size: medium;
-                    background-color: black; color: aliceblue;" onclick="goToLogin()">Back to Login</button>
+                    background-color: black; color: aliceblue;" onclick="goToLogin()">Login now!!</button>
             </div>
         </div>
     </body>

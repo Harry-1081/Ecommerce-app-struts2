@@ -61,11 +61,17 @@ public class AdminController extends ActionSupport implements SessionAware
         ObjectMapper objectMapper = new ObjectMapper();
         String type = objectMapper.readTree(jsonPayload).get("type").asText();
         try {
-            if("promote".equals(type))
-                ds.addManager(id);
-            else if("demote".equals(type))
-                ds.removeManager(id);
-            message = "Role updated successfully !";
+            int userId = Integer.valueOf(session.get("userId").toString());
+            if("promote".equals(type)){
+                if(!ds.addManager(id,userId))
+                    message = "User cannot have two roles";
+                else
+                    message = "Role updated successfully !";
+            }
+            else if("demote".equals(type)){
+                ds.removeManager(id, userId);
+                message = "Role updated successfully !";
+            }
         } catch (SQLException | ClassNotFoundException e) {
             message = "Error updating roles";
         }

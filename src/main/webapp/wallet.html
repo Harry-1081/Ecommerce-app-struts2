@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Wallet</title>
-    <script src="wallet.js" defer></script>
+    <script src="Components/JS/wallet.js" defer></script>
 <style>
     body { 
         font-family: Arial, sans-serif;
@@ -113,7 +113,7 @@
 </style>
 </head>
      <script>
-        fetch('components/header.html')
+        fetch('Components/HTML/header.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-container').innerHTML = data;

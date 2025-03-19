@@ -22,8 +22,7 @@ import service.DatabaseService;
 public class ProductController extends ActionSupport
 {
     int id;
-    
-    DatabaseService ds = new DatabaseService();
+    private DatabaseService ds = new DatabaseService();
     Product product = new Product(0, SUCCESS, 0, 0, SUCCESS);
       
     public HttpHeaders index() throws ClassNotFoundException, SQLException {
@@ -35,15 +34,7 @@ public class ProductController extends ActionSupport
         } else {
             Map<String, Object> response = new HashMap<>();
             List<Product> productList = new LinkedList<>();
-            ResultSet res = ds.viewAllProducts();
-            while(res.next()){
-                int productId = res.getInt("productId");
-                String productName = res.getString("productName");
-                int quantity = res.getInt("quantity");
-                float price = res.getFloat("price");
-                String productImage = res.getString("productImage");
-                productList.add(new Product(productId, productName, quantity, price, productImage));
-            }
+
             response.put("productList", productList);
             ActionContext.getContext().put("jsonResponse", response);
             return new DefaultHttpHeaders("success").disableCaching();

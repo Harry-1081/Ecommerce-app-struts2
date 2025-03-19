@@ -46,6 +46,6 @@ function showNotification(message) {
     setTimeout(() => {
         notification.remove();
         if(message ==="Account Created")
-            window.location.href = "/basic-struts/login";
+            window.location.href = "/struts2/login";
     }, 3000); 
 }

@@ -62,8 +62,9 @@ public class ManagerController extends ActionSupport implements SessionAware
         ObjectMapper mapper=new ObjectMapper();
 
         try {
+            int mid = Integer.valueOf(session.get("userId").toString());
             product=mapper.readValue(jsonPayload,Product.class);
-            ds.createProduct(product);
+            ds.createProduct(product,mid);
             message = "product successfully created";
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,9 +82,10 @@ public class ManagerController extends ActionSupport implements SessionAware
         ObjectMapper mapper=new ObjectMapper();
 
         try {
+            int mid = Integer.valueOf(session.get("userId").toString());
             product=mapper.readValue(jsonPayload,Product.class);
             message = "Product data Updated successfully";
-            ds.updateProduct(id, product.getQuantity(), product.getPrice());
+            ds.updateProduct(id, product.getQuantity(), product.getPrice(),"Manager:"+mid);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
@@ -95,9 +97,10 @@ public class ManagerController extends ActionSupport implements SessionAware
     public HttpHeaders destroy() throws IOException{
         Map<String, Object> response = new HashMap<>();
         String message = "";
-    
+        
         try {
-            ds.deleteProduct(id);
+            int mid = Integer.valueOf(session.get("userId").toString());
+            ds.deleteProduct(id,mid);
             message = "Product deleted successfully !";
         } catch (SQLException | ClassNotFoundException e) {
             message = "Error updating data";

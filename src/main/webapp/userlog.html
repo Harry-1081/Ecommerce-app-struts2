@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Log</title>
+    <script src="Components/JS/userlog.js" defer></script>
+<style>
+    body { 
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0; 
+        padding: 0;
+        overflow-x: hidden; 
+    }
+    body::-webkit-scrollbar{
+        display: none;
+    }
+    h1 { 
+        text-align: center;
+        color: #333;
+        padding: 20px; 
+    }
+    ul { 
+        list-style-type: none;
+        width: 80%;
+    }
+    li { 
+        background-color: white; 
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; 
+        font-size: 1.2em; 
+    }
+    .userlog-details,.userlog-headers {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+    .userlog-details div{
+        height: 20px;
+        padding: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        border: 1px black solid;
+        overflow-y: auto;
+        overflow-x: auto;
+        scrollbar-width: none;        
+    }
+
+    .userlog-headers div{
+        height: 20px;
+        padding: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        background-color: #b3b3b389;
+        border: 1px black solid;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;        
+    }
+    #userlog-id {
+        width: 5%;
+    }
+    #userlog-action, #userlog-status {
+        width:15%;
+    }
+    #userlog-time{
+        width: 20%;
+    }
+    #userlog-parameter{
+        width: 25%;
+    }
+    #userlog-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        border-top: 1px black solid;
+        background-color: white;
+        margin-top: 40px;
+    }
+
+    #notifications-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+    }
+
+    .notification {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+        width: 250px;
+        opacity: 0;
+        animation: fadeInOut 5s forwards;
+    }
+
+    @keyframes fadeInOut {
+        0% { opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+</style>
+</head>
+    <div id="header-container"></div>
+    <body>
+            <div id="userlog-page">   
+                <h1>userlog log</h1>
+
+                <div>
+                    <select id="status-menu" name="options">
+                        <option value="">All status</option>
+                        <option value="added">added</option>
+                        <option value="updated">updated</option>
+                        <option value="removed">Removed</option>
+                        <option value="created">Created</option>
+                        <option value="success">Success</option>
+                    </select>
+                    <select id="action-menu" name="options">
+                        <option id="v1" value="">All actions</option>
+                        <option id="v2" value="user signup">user signup</option>
+                        <option id="v3" value="Inventry change">Product Inventory updates</option>
+                        <option id="v4" value="Purchased Product">Product Purchase</option>
+                        <option id="v5" value="Added money to wallet">Money added to wallet</option>
+                        <option id="v6" value="role">Role changes</option>
+                        <option id="v7" value="New Product creation">Products Added</option>
+                        <option id="v8" value="Product Removal">Product Removals</option>
+                        <option id="v9" value="cart">User Cart Changes</option>
+                    </select>
+                    <input id="start-date" type="date" placeholder="Enter Start date" title="Start Date">
+                    <input id="end-date" type="date" placeholder="Enter End date" title="End Date">
+                    <button onclick="reRenderList(
+                        document.getElementById(`start-date`).value,
+                        document.getElementById(`end-date`).value,
+                        document.getElementById(`action-menu`).value,
+                        document.getElementById(`status-menu`).value,
+                    )">Search</button>
+                </div>
+
+                <ul id="userlog-list">
+                </ul>
+            </div>
+            <div id="notifications-container"></div>
+    </body>
+</html>
+    

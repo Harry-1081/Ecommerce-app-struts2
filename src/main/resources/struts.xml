@@ -50,8 +50,8 @@
                 <param name="root">jsonResponse</param>
             </result>
             <result name="Superadmin">/superadmin.html</result>
-            <result name="unauthorized">components/unauthorized.html</result>
-            <result name="noUser">components/noUser.html</result>
+            <result name="unauthorized">Components/HTML/unauthorized.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
         </action>
 
         <action name="Superadmin/{id}" class="controller.SuperAdminController">
@@ -80,16 +80,16 @@
                 <param name="root">jsonResponse</param>
             </result>
             <result name="admin">/admin.html</result>
-            <result name="unauthorized">components/unauthorized.html</result>
-            <result name="noUser">components/noUser.html</result>
+            <result name="unauthorized">Components/HTML/unauthorized.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
         </action>
 
         <action name="admin/{id}" class="controller.AdminController">
             <result name="success" type="json">
                 <param name="root">jsonResponse</param>
             </result>
-            <result name="unauthorized">components/unauthorized.html</result>
-            <result name="noUser">components/noUser.html</result>
+            <result name="unauthorized">Components/HTML/unauthorized.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
         </action>
 
     </package>
@@ -111,16 +111,16 @@
                 <param name="root">jsonResponse</param>
             </result>
             <result name="manager">/manager.html</result>
-            <result name="unauthorized">components/unauthorized.html</result>
-            <result name="noUser">components/noUser.html</result>
+            <result name="unauthorized">Components/HTML/unauthorized.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
         </action>
 
         <action name="manager/{id}" class="controller.ManagerController">
             <result name="success" type="json">
                 <param name="root">jsonResponse</param>
             </result>
-            <result name="unauthorized">components/unauthorized.html</result>
-            <result name="noUser">components/noUser.html</result>
+            <result name="unauthorized">Components/HTML/unauthorized.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
         </action>
 
         <action name="alert" class="controller.AlertController">
@@ -128,6 +128,8 @@
                 <param name="root">jsonResponse</param>
             </result>
             <result name="alert">/alert.html</result>
+            <result name="unauthorized">Components/HTML/unauthorized.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
         </action>
 
     </package>
@@ -148,14 +150,14 @@
             <result name="success" type="json">
                 <param name="root">jsonResponse</param>
             </result>
-            <result name="noUser">components/noUser.html</result>
+            <result name="noUser">Components/HTML/error.html</result>
         </action>
 
         <action name="purchase/{id}" class="controller.PurchaseController">
             <result name="success" type="json">
                 <param name="root">jsonResponse</param>
             </result>
-            <result name="noUser">components/noUser.html</result>
+            <result name="noUser">Components/HTML/error.html</result>
         </action>
 
         <action name="cart" class="controller.CartController">
@@ -163,14 +165,14 @@
                 <param name="root">jsonResponse</param>
             </result>
             <result name="cart">/cart.html</result>
-            <result name="noUser">components/noUser.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
         </action>
 
         <action name="cart/{id}" class="controller.CartController">
             <result name="success" type="json">
                 <param name="root">jsonResponse</param>
             </result>
-            <result name="noUser">components/noUser.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
         </action>
 
         <action name="wallet" class="controller.WalletController">
@@ -178,7 +180,17 @@
                 <param name="root">jsonResponse</param>
             </result>
             <result name="wallet">/wallet.html</result>
-            <result name="noUser">components/noUser.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
+        </action>
+
+        <action name="audit" class="controller.AuditController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="audit">/audit.html</result>
+            <result name="logs">/userlog.html</result>
+            <result name="unauthorized">Components/HTML/unauthorized.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
         </action>
 
     </package>

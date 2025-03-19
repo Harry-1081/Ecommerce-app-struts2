@@ -87,7 +87,8 @@ public class CartController  extends ActionSupport implements ModelDriven<Cart>,
         int quantity = objectMapper.readTree(jsonPayload).get("quantity").asInt();
 
         try {
-            ds.updateCart(id, quantity);
+            int userId = Integer.valueOf(session.get("userId").toString());
+            ds.updateCart(id, quantity,userId);
             message = "Product updated successfully !";
         } catch (SQLException | ClassNotFoundException e) {
             message = "Error updating data";
@@ -103,7 +104,8 @@ public class CartController  extends ActionSupport implements ModelDriven<Cart>,
         String message = "";
 
         try {
-            ds.clearFromCart(id);
+            int userId = Integer.valueOf(session.get("userId").toString());
+            ds.clearFromCart(id,userId);
             message = "Product deleted successfully !";
         } catch (SQLException | ClassNotFoundException e) {
             message = "Error updating data";

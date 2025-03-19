@@ -60,11 +60,16 @@ public class SuperAdminController extends ActionSupport implements SessionAware
         ObjectMapper objectMapper = new ObjectMapper();
         String type = objectMapper.readTree(jsonPayload).get("type").asText();
         try {
-            if("promote".equals(type))
-                ds.addAdmin(id);
-            else if("demote".equals(type))
+            if("promote".equals(type)){
+                if(!ds.addAdmin(id))
+                    message = "User cannot have two roles";
+                else
+                    message = "Role updated successfully !";
+            }
+            else if("demote".equals(type)){
                 ds.removeAdmin(id);
-            message = "Role updated successfully !";
+                message = "Role updated successfully !";
+            }
         } catch (SQLException | ClassNotFoundException e) {
             message = "Error updating roles";
         }

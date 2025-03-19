@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Cart</title>
-    <script src="cart.js" defer></script>
+    <script src="Components/JS/cart.js" defer></script>
 </head>
 <style>
     body { 
@@ -87,7 +87,7 @@
 </style>
     <body>
         <script>
-            fetch('components/header.html')
+            fetch('Components/HTML/header.html')
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('header-container').innerHTML = data;
@@ -107,7 +107,7 @@
                         <input type="hidden" id="cartIdInput" name="cartId">
                         <label for="quantityInput">Quantity:</label>
                         <input type="number" id="quantityInput" name="productQuantity" min="1" required><br>
-                        <button type="submit" style="width: 250px;">Update</button>
+                        <button type="submit" style="width: 250px;"></button>
                     </form>
                     <button type="button" onclick="closePopup()">Cancel</button>
                 </div>
