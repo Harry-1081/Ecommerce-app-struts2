@@ -19,22 +19,21 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import model.Account;
-import service.DailyTaskScheduler;
 import service.DatabaseService;
+import service.RedisService;
 
 public class LoginController extends ActionSupport implements SessionAware 
 {
     String currentRole = "";
     Map<String, Object> session;
+
+    private RedisService rs = new RedisService();
     private DatabaseService ds = new DatabaseService();
-    private DailyTaskScheduler dts = new DailyTaskScheduler();
     private Account account = new Account(0, SUCCESS, SUCCESS, SUCCESS, 0, SUCCESS);
 
     public HttpHeaders index() {
         HttpServletRequest request = ServletActionContext.getRequest();
         boolean defCall = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
-
-        dts.main();
 
         if (!defCall) {
             session.clear();
@@ -72,6 +71,11 @@ public class LoginController extends ActionSupport implements SessionAware
 
             if(role==null)
                 role="user";
+
+            if("user".equals(role)){
+                rs.setTransactionCache(userId);
+                rs.setCartCache(userId);
+            }
 
             if(account.getPassword().equals(password)){
                 session.put("userId", userId);

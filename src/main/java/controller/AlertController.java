@@ -1,7 +1,5 @@
 package controller;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,14 +15,14 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import model.Alerts;
-import service.DatabaseService;
+import service.RedisService;
 
 public class AlertController extends ActionSupport
 {
     Map<String, Object> session;
-    DatabaseService ds = new DatabaseService();
+    private RedisService rs = new RedisService();
 
-    public HttpHeaders index() throws ClassNotFoundException, SQLException {
+    public HttpHeaders index() {
         HttpServletRequest request = ServletActionContext.getRequest();
         boolean defCall = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 
@@ -33,13 +31,18 @@ public class AlertController extends ActionSupport
         } else {
             Map<String, Object> response = new HashMap<>();
             List<Alerts> alertList = new LinkedList<>();
-            ResultSet res = ds.viewAllAlerts();
-            while(res.next()){
-                int id = res.getInt("alertId");
-                String message = res.getString("alertMessage");
-                String date = res.getString("alertDate");
-                alertList.add(new Alerts(id, message, date));
+            
+            String result = rs.getData("alertList");
+
+            if(result!=null){
+                String alerts[] = result.split("\n");
+                for(String s:alerts){
+                    if(s.equals(""))
+                        continue;
+                    alertList.add(new Alerts(Integer.valueOf(s.split("\\|")[0]),s.split("\\|")[1],s.split("\\|")[2]));
+                }
             }
+
             response.put("alertList", alertList);
             ActionContext.getContext().put("jsonResponse", response);
             return new DefaultHttpHeaders("success").disableCaching();

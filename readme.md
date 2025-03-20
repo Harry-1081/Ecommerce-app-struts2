@@ -52,7 +52,13 @@ To contribute:
 
 ## Change Log
 
-### [1.1] 19/03/2025
+### [ 1.1.1 ] 20/03/2025
+ - <b>Added</b> 
+    - Jedis (Redis for Java) to Cache frequently accessed datas.
+    - Listener to initialize cache & daily report scheduler.
+</br>
+
+### [ 1.1 ] 18/03/2025
  - <b>Added</b>
     - Kafka DLQ and retries mechanism to deal with runtime exceptions.
     - Audit Log Generation for all processes using Kafka.
@@ -63,7 +69,7 @@ To contribute:
     - Dual Access for Users with special roles.
 </br>
 
-### [1.0] 03/03/2025
+### [ 1.0 ] 03/03/2025
  - <b>Initial Commit</b> ( Struts2 Webapp with REST plugin and kafka based alert system ) 
 
 </br>

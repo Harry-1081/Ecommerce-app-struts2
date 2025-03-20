@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,12 +21,14 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import model.Account;
 import service.DatabaseService;
+import service.RedisService;
 
 public class AdminController extends ActionSupport implements SessionAware
 {    
     int id;
     Map<String, Object> session;
-    DatabaseService ds = new DatabaseService();
+    private RedisService rs = new RedisService();
+    private DatabaseService ds = new DatabaseService();
     Account account = new Account(0, NONE, NONE, SUCCESS, 0, NONE);
     
     public HttpHeaders index() throws ClassNotFoundException, SQLException {
@@ -40,14 +41,19 @@ public class AdminController extends ActionSupport implements SessionAware
         } else {
             Map<String, Object> response = new HashMap<>();
             List<Account> userList = new LinkedList<>();
-            ResultSet res = ds.viewAllUsers();
-            while(res.next()){
-                int id = res.getInt("id");
-                String name = res.getString("name"); 
-                String email = res.getString("email"); 
-                String role = res.getString("role");
-                userList.add(new Account(id, name, email, "", 0, role));
+
+            String result = rs.getData("userList");
+
+            if(result!=null){
+                String products[] = result.split("\n");
+                for(String s:products){
+                    if(s.equals(""))
+                        continue;
+                    userList.add(new Account(Integer.valueOf(s.split("\\|")[0]),s.split("\\|")[1],
+                    (s.split("\\|")[2]),"*",0,s.split("\\|")[3]));
+                }
             }
+
             response.put("userList", userList);
             ActionContext.getContext().put("jsonResponse", response);
             return new DefaultHttpHeaders("success").disableCaching();

@@ -20,6 +20,10 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <listener>
+        <listener-class>controller.StartupController</listener-class>
+    </listener>
+
     <error-page>
         <error-code>404</error-code>
         <location>/Components/HTML/error.html</location>

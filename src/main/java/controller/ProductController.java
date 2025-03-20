@@ -18,10 +18,12 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import model.Product;
 import service.DatabaseService;
+import service.RedisService;
 
 public class ProductController extends ActionSupport
 {
     int id;
+    private RedisService rs = new RedisService();
     private DatabaseService ds = new DatabaseService();
     Product product = new Product(0, SUCCESS, 0, 0, SUCCESS);
       
@@ -34,6 +36,18 @@ public class ProductController extends ActionSupport
         } else {
             Map<String, Object> response = new HashMap<>();
             List<Product> productList = new LinkedList<>();
+
+            String result = rs.getData("productList");
+
+            if(result!=null){
+                String products[] = result.split("\n");
+                for(String s:products){
+                    if(s.equals(""))
+                        continue;
+                    productList.add(new Product(Integer.valueOf(s.split("\\|")[0]),s.split("\\|")[1],
+                    Integer.valueOf(s.split("\\|")[2]),Float.valueOf(s.split("\\|")[3]),s.split("\\|")[4]));
+                }
+            }
 
             response.put("productList", productList);
             ActionContext.getContext().put("jsonResponse", response);

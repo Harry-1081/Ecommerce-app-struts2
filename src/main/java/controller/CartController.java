@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,12 +22,14 @@ import com.opensymphony.xwork2.ModelDriven;
 
 import model.Cart;
 import service.DatabaseService;
+import service.RedisService;
 
 public class CartController  extends ActionSupport implements ModelDriven<Cart>, SessionAware
 {
     int id;
     Map<String, Object> session;
-    DatabaseService ds = new DatabaseService();
+    private RedisService rs = new RedisService();
+    private DatabaseService ds = new DatabaseService();
     Cart cart = new Cart(0, 0, 0, 0, SUCCESS, NONE);
 
     public HttpHeaders index() throws ClassNotFoundException, SQLException {
@@ -42,15 +43,17 @@ public class CartController  extends ActionSupport implements ModelDriven<Cart>,
             List<Cart> cartList = new LinkedList<>();
         
             int userId = Integer.valueOf(session.get("userId").toString());
-            ResultSet res = ds.viewCart(userId);
-            
-            while(res.next()){
-                int cartId = res.getInt("cartId");
-                int productId  = res.getInt("productId");
-                String productName = res.getString("productName");
-                String productImage = res.getString("productImage");
-                int productQuantity  = res.getInt("productQuantity");
-                cartList.add(new Cart(cartId, userId, productId, productQuantity, productName, productImage));
+
+            String result = rs.getData("cartList");
+
+            if(result!=null){
+                String transactions[] = result.split("\n");
+                for(String s:transactions){
+                    if(s.equals(""))
+                        continue;
+                    cartList.add(new Cart(Integer.valueOf(s.split("\\|")[0]), userId, Integer.valueOf(s.split("\\|")[1]),
+                    Integer.valueOf(s.split("\\|")[4]), s.split("\\|")[2], s.split("\\|")[3]));
+                }
             }
             
             response.put("cartList", cartList);

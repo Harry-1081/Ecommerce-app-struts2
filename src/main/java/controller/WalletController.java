@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,11 +21,13 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import model.Transaction;
 import service.DatabaseService;
+import service.RedisService;
 
 public class WalletController  extends ActionSupport implements SessionAware
 {
     Map<String, Object> session;
-    DatabaseService ds = new DatabaseService();
+    private RedisService rs = new RedisService();
+    private DatabaseService ds = new DatabaseService();
     Transaction transaction = new Transaction(0, 0, 0, NONE, ERROR);
 
     public HttpHeaders index() throws ClassNotFoundException, SQLException {
@@ -40,16 +41,20 @@ public class WalletController  extends ActionSupport implements SessionAware
             List<Transaction> transactionList = new LinkedList<>();
         
             int userId = Integer.valueOf(session.get("userId").toString());
-            ResultSet res = ds.viewTransactions(userId);
             float walletBalance = ds.checkWalletBalance(userId);
-            
-            while(res.next()){
-                int transactionId = res.getInt("transactionId");
-                float amount = res.getFloat("amount");
-                String reason = res.getString("reason");
-                String transactionDate = res.getString("transactionDate");
-                transactionList.add(new Transaction(transactionId, userId, amount, reason, transactionDate));
+
+            String result = rs.getData("transactionList");
+
+            if(result!=null){
+                String transactions[] = result.split("\n");
+                for(String s:transactions){
+                    if(s.equals(""))
+                        continue;
+                    transactionList.add(new Transaction(Integer.valueOf(s.split("\\|")[0]),userId,
+                    Float.valueOf(s.split("\\|")[1]),s.split("\\|")[2],s.split("\\|")[3]));
+                }
             }
+
             response.put("transactionList", transactionList);
             response.put("walletBalance", walletBalance);
             ActionContext.getContext().put("jsonResponse", response);

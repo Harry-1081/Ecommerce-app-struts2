@@ -23,6 +23,7 @@ import model.Product;
 public class DatabaseService {
     
     static Connection c;
+    private RedisService rs = new RedisService();
     private KafkaProducerService kps = new KafkaProducerService();
     private KafkaConsumerService kcs = new KafkaConsumerService();
         
@@ -142,7 +143,9 @@ public class DatabaseService {
         String kafkaMessage = String.format("{\"productId\": \"%s\", \"quantity\": %d, \"price\": %.2f}",pid, quantity, price);
         kps.sendProductMessage(kafkaMessage);
         kcs.startProductConsumers(info);
+
         executeQuery(st);
+        rs.setProductCache();
     }
     
     public float checkWalletBalance(int id) throws SQLException {
@@ -187,6 +190,7 @@ public class DatabaseService {
         st.setString(4, time);
 
         executeQuery(st);
+        rs.setTransactionCache(userId);
     }
 
     public ResultSet viewAllUsers() throws SQLException, ClassNotFoundException {
@@ -211,6 +215,7 @@ public class DatabaseService {
         kcs.startRoleConsumers("removed",0);
 
         executeQuery(st);
+        rs.setUserCache();
     }
     
     public boolean addAdmin(int id) throws SQLException,ClassNotFoundException {
@@ -226,12 +231,13 @@ public class DatabaseService {
         st.setInt(1, id);
         st.setString(2, "admin");
         
-
         executeQuery(st);
         
         String kafkaMessage = String.format("{\"id\": \"%s\", \"role\": \"%s\"}",id,"Admin");
         kps.sendRoleMessage(kafkaMessage);
         kcs.startRoleConsumers("added",0);
+
+        rs.setUserCache();
         return true;
     }
 
@@ -246,6 +252,7 @@ public class DatabaseService {
         kcs.startRoleConsumers("removed",userId);
 
         executeQuery(st);
+        rs.setUserCache();
     }
     
     public boolean addManager(int id,int userId) throws SQLException,ClassNotFoundException {
@@ -266,6 +273,8 @@ public class DatabaseService {
         String kafkaMessage = String.format("{\"id\": \"%s\", \"role\": \"%s\"}",id,"Manager");
         kps.sendRoleMessage(kafkaMessage);
         kcs.startRoleConsumers("added",userId);
+        rs.setUserCache();
+        
         return true;
     }
 
@@ -278,7 +287,8 @@ public class DatabaseService {
         kps.sendProductRemovalMessage(kafkaMessage);
         kcs.startProductRemovalConsumers(mid);
         
-        executeQuery(st);   
+        executeQuery(st);
+        rs.setProductCache(); 
     }
     
     public void createProduct(Product product,int mid) throws SQLException {
@@ -294,6 +304,7 @@ public class DatabaseService {
         kcs.startNewProductConsumers(mid);
 
         executeQuery(st);
+        rs.setProductCache();
     }
 
     public ResultSet viewTransactions(int userId) throws SQLException, ClassNotFoundException  {
@@ -309,10 +320,10 @@ public class DatabaseService {
         PreparedStatement stmt = c.prepareStatement(query);
         stmt.setInt(1, userId);
         stmt.setInt(2, pid);
-        ResultSet rs = stmt.executeQuery();
+        ResultSet res = stmt.executeQuery();
         
-        if (rs.next()) {
-            updateCart(rs.getInt("cartId"), rs.getInt("productQuantity")+quantity, userId);
+        if (res.next()) {
+            updateCart(res.getInt("cartId"), res.getInt("productQuantity")+quantity, userId);
             
         } else {
             String insertQuery = "INSERT INTO ecom.cart (userID, productId, productQuantity) VALUES (?, ?, ?)";
@@ -326,7 +337,7 @@ public class DatabaseService {
             kps.sendNewCartMessage(kafkaMessage);
             kcs.startNewCartConsumers();
         }
-        
+        rs.setCartCache(userId);
     }
     
     public void updateCart(int cartId, int quantity, int userId) throws SQLException, ClassNotFoundException{
@@ -335,6 +346,7 @@ public class DatabaseService {
         updateStmt.setInt(1, quantity);
         updateStmt.setInt(2, cartId);
         updateStmt.executeUpdate();
+        rs.setCartCache(userId);
 
         String kafkaMessage = String.format("{\"userId\": \"%s\", \"cartId\": %d, \"productQuantity\": %d}",userId,cartId,quantity);
         kps.sendCartMessage(kafkaMessage);
@@ -357,11 +369,11 @@ public class DatabaseService {
         PreparedStatement st = c.prepareStatement(query);
         st.setInt(1, cartId);
         executeQuery(st);
+        rs.setCartCache(userId);
 
         String kafkaMessage = String.format("{\"userId\": \"%s\", \"cartId\": %d}",userId,cartId);
         kps.sendCartRemovalMessage(kafkaMessage);
         kcs.startCartRemovalConsumers();
-
     }
     
     public ResultSet checkAvailability(int pid) throws SQLException, ClassNotFoundException {
@@ -396,6 +408,7 @@ public class DatabaseService {
         }
 
         clearCart(userId);
+        rs.setCartCache(userId);
 
         if(total>0){
             updateWalletBalance(userId, -total, "Purchased Cart");
@@ -429,7 +442,9 @@ public class DatabaseService {
         return false;
     }
 
-    public ResultSet viewAllAlerts() throws SQLException {
+    public ResultSet viewAllAlerts() throws SQLException, ClassNotFoundException {
+        if(c==null)
+            makeConnection();   
         String query = "SELECT * from ecom.alerts order by alertId DESC";
         PreparedStatement st = c.prepareStatement(query);
         ResultSet res = executeQuery(st);
@@ -444,7 +459,8 @@ public class DatabaseService {
             st.setString(1, message);
             st.setString(2, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             executeQuery(st);
-        }
+            rs.setAlertCache();
+    }
         
     public ResultSet viewAllAudits(String role) throws SQLException, ClassNotFoundException { 
             String query = "SELECT * from ecom.log";
