@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Discount Page</title>
+        <script src="Components/JS/discount.js" defer></script>
+    </head>
+    <style>
+            #discount-page {
+                height: 100vh;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 0;
+                background-color: azure;
+            }
+            #discount-form {
+                padding: 50px;
+                padding-top: 20px;
+                position: absolute;
+                background-color: white;
+                box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px,
+                rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+            }
+            #discount-title{
+                font-size: 25px;
+            }
+            #discount-div2 input {
+                margin-top: 5px;
+                width: 185px;
+                height: 15px;
+                border-radius: 5px;
+                padding: 5px;
+                border-color: rgba(0, 0, 0, 0.293);
+            }
+            #discount-button {
+                width: 200px;
+                height: 35px;
+                margin-top: 10px;
+                padding-left: 5px;
+                padding-right: 5px;
+                background-color: rgb(157, 192, 157);
+            }
+            #discount-button :hover {
+                background-color: rgb(123, 165, 123);
+            }
+
+            /* Notification */
+
+            #notifications-container {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                z-index: 1000;
+            }
+
+            .notification {
+                background-color: #4caf50;
+                color: white;
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+                font-size: 16px;
+                width: 250px;
+                opacity: 0;
+                animation: fadeInOut 5s forwards;
+            }
+
+            @keyframes fadeInOut {
+                0% { opacity: 0; }
+                10% { opacity: 1; }
+                90% { opacity: 1; }
+                100% { opacity: 0; }
+            }
+
+        </style>
+    <body>
+        <script>
+            fetch('Components/HTML/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+                    document.getElementById('mheader-nav').style.display = 'block';
+                });
+        </script>
+        <div id="header-container"></div>
+        <div id="discount-page">
+            <form id="discount-form">
+
+                <div id="discount-div1">
+                    <h2 id="discount-title"><b>Set Discount</b></h2>
+                </div>
+                
+                <div id="discount-div2">
+                    <span for="id">Product Id :</span></br>
+                    <input type="number" id="discount-id" name="id" placeholder="Enter Product id" required><br><br>
+
+                    <span for="percent">Dicount percentage :</span></br>
+                    <input type="number" id="discount-percent" name="percent" placeholder="Enter Discount percent" min="1" max="70" required><br><br>
+                    
+                    <span for="from">Set Discount From :</span></br>
+                    <input type="datetime-local" id="discount-from" name="from" placeholder="Enter Start Time" required><br><br>
+
+                    <span for="till">Set Discount till :</span></br>
+                    <input type="datetime-local" id="discount-till" name="till" placeholder="Enter Discount End Time" required><br><br>
+                    
+                    <button id="discount-button" type="submit"><b>Set Discount</b></button><br>
+                </div>
+            </form>
+            <div id="notifications-container"></div>
+        </div>
+    </body>
+</html>
+

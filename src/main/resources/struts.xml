@@ -132,6 +132,16 @@
             <result name="noUser">Components/HTML/noUser.html</result>
         </action>
 
+        <action name="discount" class="controller.DiscountController">
+            <result name="success" type="json">
+                <param name="root">jsonResponse</param>
+            </result>
+            <result name="discount">/discount.html</result>
+            <result name="unauthorized">Components/HTML/unauthorized.html</result>
+            <result name="noUser">Components/HTML/noUser.html</result>
+        </action>
+
+
     </package>
 
     <package name="rest-user" extends="rest-default,json-default">

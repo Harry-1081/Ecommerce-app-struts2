@@ -48,31 +48,22 @@ To contribute:
 4. Push to the branch (`git push origin feature-branch`).
 5. Open a pull request.
 
-</br>
 
 ## Change Log
 
+### [ 1.1.2 ] 25/03/2025
+ - <b>Added</b> : Feature to schedule Discounts using Java Scheduler.
+
 ### [ 1.1.1 ] 20/03/2025
- - <b>Added</b> 
-    - Jedis (Redis for Java) to Cache frequently accessed datas.
-    - Listener to initialize cache & daily report scheduler.
-</br>
+ - <b>Added</b> : Jedis (Redis for Java) to Cache frequently accessed datas and Listener to initialize cache & daily report scheduler.
 
 ### [ 1.1 ] 18/03/2025
- - <b>Added</b>
-    - Kafka DLQ and retries mechanism to deal with runtime exceptions.
-    - Audit Log Generation for all processes using Kafka.
-    - Scheduler based report generation and mailing to Superadmin.
+ - <b>Added</b> : Kafka DLQ and retries mechanism to deal with runtime exceptions, Audit Log Generation for all processes using Kafka and Scheduler based report generation and mailing to Superadmin.
 
- - <b>Changed</b> 
-    - Switched to key-value based hashing strategy.
-    - Dual Access for Users with special roles.
-</br>
+ - <b>Changed</b> : Switched to key-value based hashing strategy and Dual Access for Users with special roles.
 
 ### [ 1.0 ] 03/03/2025
- - <b>Initial Commit</b> ( Struts2 Webapp with REST plugin and kafka based alert system ) 
-
-</br>
+ - <b>Initial Commit</b> ( Struts2 Webapp with REST plugin and kafka based alert system )
 
 ## Contributors
 

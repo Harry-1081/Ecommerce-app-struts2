@@ -2,10 +2,11 @@ package service;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class DailyTaskScheduler {
+public class TaskScheduler {
     
     private sendUserEmail sue = new sendUserEmail();
     private DatabaseService dbs = new DatabaseService();
@@ -13,7 +14,7 @@ public class DailyTaskScheduler {
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static final AtomicBoolean isScheduled = new AtomicBoolean(false); 
     
-    public void main() {
+    public void setDailyTask() {
         if (isScheduled.compareAndSet(false, true)) {
             scheduleDailyTask(() -> {
                 try {
@@ -41,6 +42,34 @@ public class DailyTaskScheduler {
             nextRun = nextRun.plusDays(1);
         }
 
+        return Duration.between(now, nextRun).getSeconds();
+    }
+
+        
+    public void setDiscount(int productId, int quantity, float price, String dateTime) {
+        scheduleDiscount(() -> {
+            try {
+                dbs.updateProduct(productId, quantity, price, "-");
+                System.out.println("Executed task at: " + ZonedDateTime.now(TIME_ZONE));
+            } catch (SQLException e) {
+                System.out.print(e.toString());
+            }
+        }, dateTime);
+    }
+
+    public void scheduleDiscount(Runnable task,String dateTime) {
+        long initialDelay = computeNextRunDelay(dateTime);
+        scheduler.scheduleAtFixedRate(task, initialDelay, TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
+    }
+        
+    private long computeNextRunDelay(String dateTime) {
+        ZonedDateTime now = ZonedDateTime.now(TIME_ZONE);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime starDateTime = LocalDateTime.parse(dateTime, formatter);
+        ZonedDateTime nextRun = ZonedDateTime.of(starDateTime, now.getZone());
+        if (now.isAfter(nextRun)) {
+            nextRun = now;
+        }
         return Duration.between(now, nextRun).getSeconds();
     }
 }
